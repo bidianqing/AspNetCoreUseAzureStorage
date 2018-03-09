@@ -19,9 +19,9 @@ namespace AspNetCoreUseAzureStorage
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AzureStorage(options =>
+            services.AddAzureStorage(options =>
             {
-                options.ConnectionString = "ConnectionString";
+                options.ConnectionString = Configuration.GetConnectionString("AzureStorageConnectionString");
             });
         }
 

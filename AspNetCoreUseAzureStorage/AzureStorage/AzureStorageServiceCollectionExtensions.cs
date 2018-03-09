@@ -5,7 +5,7 @@ namespace AspNetCoreUseAzureStorage.AzureStorage
 {
     public static class AzureStorageServiceCollectionExtensions
     {
-        public static IServiceCollection AzureStorage(this IServiceCollection services, Action<AzureStorageOptions> setupAction)
+        public static IServiceCollection AddAzureStorage(this IServiceCollection services, Action<AzureStorageOptions> setupAction)
         {
             if (services == null)
             {
