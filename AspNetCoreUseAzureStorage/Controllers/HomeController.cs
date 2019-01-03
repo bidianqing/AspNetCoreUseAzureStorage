@@ -24,7 +24,11 @@ namespace AspNetCoreUseAzureStorage.Controllers
         public async Task<IActionResult> Upload(IFormFile file)
         {
             string blobName = $"{DateTime.Now.Year}/{DateTime.Now.Month}/{DateTime.Now.Day}/{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            await _azureStorageRepository.UploadFromStreamAsync(ContainerName.avatar, blobName, file.OpenReadStream());
+            using (Stream stream = file.OpenReadStream())
+            {
+                await _azureStorageRepository.UploadFromStreamAsync(ContainerName.avatar, blobName, stream);
+            }
+
             return Json(new { success = true });
         }
 
