@@ -26,7 +26,7 @@ namespace AspNetCoreUseAzureStorage.Controllers
             string blobName = $"{DateTime.Now.Year}/{DateTime.Now.Month}/{DateTime.Now.Day}/{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             using (Stream stream = file.OpenReadStream())
             {
-                await _azureStorageRepository.UploadFromStreamAsync(ContainerName.avatar, blobName, stream);
+                await _azureStorageRepository.UploadAsync(ContainerName.avatar, blobName, stream);
             }
 
             return Json(new { success = true });
