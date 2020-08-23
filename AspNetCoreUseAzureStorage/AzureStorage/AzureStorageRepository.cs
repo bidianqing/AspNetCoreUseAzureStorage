@@ -1,9 +1,8 @@
-﻿using Azure;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace AspNetCoreUseAzureStorage.AzureStorage
@@ -20,7 +19,7 @@ namespace AspNetCoreUseAzureStorage.AzureStorage
             _azureStorageOptions = optionsAccessor.Value;
         }
 
-        public async Task UploadAsync(ContainerName containerName, string blobName, Stream source)
+        public async Task UploadAsync(ContainerName containerName, string blobName, IFormFile file)
         {
             var blobServiceClient = new BlobServiceClient(_azureStorageOptions.ConnectionString);
 
@@ -30,9 +29,10 @@ namespace AspNetCoreUseAzureStorage.AzureStorage
 
             BlobClient blobClient = blobContainerClient.GetBlobClient(blobName);
 
-            await blobClient.UploadAsync(source, new BlobHttpHeaders
+            using var content = file.OpenReadStream();
+            await blobClient.UploadAsync(content, new BlobHttpHeaders
             {
-                //ContentType = "application/pdf"
+                ContentType = file.ContentType
             });
         }
     }
