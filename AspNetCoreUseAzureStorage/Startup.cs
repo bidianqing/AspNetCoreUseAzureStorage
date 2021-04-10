@@ -20,6 +20,9 @@ namespace AspNetCoreUseAzureStorage
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            // https://github.com/Azure/azure-sdk-for-net/issues/8941
+            // https://devblogs.microsoft.com/azure-sdk/lifetime-management-and-thread-safety-guarantees-of-azure-sdk-net-clients/
             services.AddAzureStorage(options =>
             {
                 options.ConnectionString = Configuration.GetConnectionString("AzureStorageConnectionString");
