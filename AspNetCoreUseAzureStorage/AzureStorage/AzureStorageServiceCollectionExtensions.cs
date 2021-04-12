@@ -19,7 +19,7 @@ namespace AspNetCoreUseAzureStorage.AzureStorage
 
             services.AddOptions();
             services.Configure(setupAction);
-            services.AddScoped(typeof(AzureStorageRepository));
+            services.AddSingleton(typeof(AzureStorageRepository));
 
             return services;
         }

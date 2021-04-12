@@ -10,20 +10,21 @@ namespace AspNetCoreUseAzureStorage.AzureStorage
     public class AzureStorageRepository
     {
         private readonly AzureStorageOptions _azureStorageOptions;
+        private readonly BlobServiceClient _blobServiceClient;
         public AzureStorageRepository(IOptions<AzureStorageOptions> optionsAccessor)
         {
             if (optionsAccessor == null)
             {
                 throw new ArgumentNullException(nameof(optionsAccessor));
             }
+
             _azureStorageOptions = optionsAccessor.Value;
+            _blobServiceClient = new BlobServiceClient(_azureStorageOptions.ConnectionString);
         }
 
         public async Task UploadAsync(ContainerName containerName, string blobName, IFormFile file)
         {
-            var blobServiceClient = new BlobServiceClient(_azureStorageOptions.ConnectionString);
-
-            var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName.ToString());
+            var blobContainerClient = _blobServiceClient.GetBlobContainerClient(containerName.ToString());
 
             await blobContainerClient.CreateIfNotExistsAsync();
 
@@ -35,7 +36,7 @@ namespace AspNetCoreUseAzureStorage.AzureStorage
             await blobClient.UploadAsync(content, new BlobHttpHeaders
             {
                 ContentType = file.ContentType
-            },null,null,new Progress(l));
+            }, null, null, new Progress(l));
         }
     }
 
