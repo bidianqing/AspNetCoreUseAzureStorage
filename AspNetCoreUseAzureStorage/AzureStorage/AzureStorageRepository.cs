@@ -9,7 +9,6 @@ namespace AspNetCoreUseAzureStorage.AzureStorage
 {
     public class AzureStorageRepository
     {
-        private readonly AzureStorageOptions _azureStorageOptions;
         private readonly BlobServiceClient _blobServiceClient;
         public AzureStorageRepository(IOptions<AzureStorageOptions> optionsAccessor)
         {
@@ -18,8 +17,7 @@ namespace AspNetCoreUseAzureStorage.AzureStorage
                 throw new ArgumentNullException(nameof(optionsAccessor));
             }
 
-            _azureStorageOptions = optionsAccessor.Value;
-            _blobServiceClient = new BlobServiceClient(_azureStorageOptions.ConnectionString);
+            _blobServiceClient = new BlobServiceClient(optionsAccessor.Value.ConnectionString);
         }
 
         public async Task UploadAsync(ContainerName containerName, string blobName, IFormFile file)
